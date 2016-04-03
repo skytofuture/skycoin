@@ -20,7 +20,7 @@ var (
 // Begins listening on http://$host, for enabling remote web access
 // Does NOT use HTTPS
 func LaunchWebInterface(host, staticDir string, daemon *daemon.Daemon) {
-	logger.Warning("Starting web interface on http://%s", host)
+	logger.Info("Starting web interface on http://%s", host)
 	logger.Warning("HTTPS not in use!")
 	appLoc := filepath.Join(staticDir, resourceDir)
 	mux := NewGUIMux(appLoc, daemon)
@@ -38,8 +38,7 @@ func LaunchWebInterfaceHTTPS(host, staticDir string, daemon *daemon.Daemon,
 	logger.Info("Using %s for the key", keyFile)
 	appLoc := filepath.Join(staticDir, resourceDir)
 	mux := NewGUIMux(appLoc, daemon)
-	err := http.ListenAndServeTLS(host, certFile, keyFile, mux)
-	if err != nil {
+	if err := http.ListenAndServeTLS(host, certFile, keyFile, mux); err != nil {
 		log.Panic(err)
 	}
 }
